@@ -41,10 +41,16 @@ public abstract class MusicCommand extends Command
         this.guildOnly = true;
         this.category = new Category("Music");
     }
-    
+
     @Override
     protected void execute(CommandEvent event) 
     {
+        if(event.getArgs().contains("/") && (!event.getArgs().contains("http://") || !event.getArgs().startsWith("https://")) && !bot.getConfig().allowLocal()){
+            event.reply(event.getClient().getError()+" No.");
+            return;
+        }
+
+
         Settings settings = event.getClient().getSettingsFor(event.getGuild());
         TextChannel tchannel = settings.getTextChannel(event.getGuild());
         if(tchannel!=null && !event.getTextChannel().equals(tchannel))
